@@ -15,6 +15,8 @@ public class NbaStatsJUnit5 {
 	@Test
 	public void testA_ComprobarTop10Jugadores() {
 		
+		System.out.println("***TOP 10 MEJORES JUGADORES CON ORDEN NORMAL***");
+		
 		ArrayList<Player> arrayADevolver;
 		String salidaEsperadaArray = "[Player [Name = Wilt Chamberlain*| Score=785], "+
 				"Player [Name = DeMar DeRozan| Score=820], "+
@@ -30,11 +32,16 @@ public class NbaStatsJUnit5 {
 		
 		DyVSolution.cargarArchivo("C:\\WORKSPACES\\EDA_2022\\practica_1\\NbaStats.txt");
 		arrayADevolver = DyVSolution.diezMejoresJugadores();
+		//System.out.println("\nArray a devolver: " + arrayADevolver);
+		//System.out.println("Salida Esperada: " + salidaEsperada);
 		assertEquals(salidaEsperadaArray, arrayADevolver.toString());
 	}
 	
 	@Test
 	public void testB_ComprobarTop10Jugadores_Reverse() {
+		
+		System.out.println("\n***TOP 10 MEJORES JUGADORES CON REVERSE***");
+		
 		ArrayList<Player> arrayADevolver;
 		String salidaEsperadaArray = "[Player [Name = LeBron James| Score=1031], " +
 				"Player [Name = James Harden| Score=994], " +
@@ -51,6 +58,8 @@ public class NbaStatsJUnit5 {
 		DyVSolution.cargarArchivo("C:\\WORKSPACES\\EDA_2022\\practica_1\\NbaStats.txt");
 		arrayADevolver = DyVSolution.diezMejoresJugadores();
 		Collections.reverse(arrayADevolver); //en vez de sacarlo de menor a mayor score, lo sacamos cambiado de sentido
+		//System.out.println("\nArray a devolver: " + arrayADevolver);
+		//System.out.println("Salida Esperada: " + salidaEsperada);
 		assertEquals(salidaEsperadaArray, arrayADevolver.toString());
 	}
 
