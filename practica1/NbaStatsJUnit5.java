@@ -33,7 +33,7 @@ public class NbaStatsJUnit5 {
 	}
 	
 	@Test
-	public void testB_ComprobarTop10Jugadores_Reverse() {
+	public void testB_ComprobarTop10Jugadores() {
 		
 		System.out.println("\n***TOP 10 MEJORES JUGADORES CON REVERSE***");
 		
