@@ -13,23 +13,25 @@ public class NbaStatsJUnit5 {
 		
 		System.out.println("***TOP 10 MEJORES JUGADORES CON ORDEN NORMAL***");
 		
-		ArrayList<Player> arrayADevolver;
-		String salidaEsperada = "[Player [Name = Wilt Chamberlain*| Score=785| Teams=[PHW, SFW, TOT, PHI, LAL]| Positions=[C], " +
-				"Player [Name = DeMar DeRozan| Score=820| Teams=[TOR]| Positions=[SG], " + 
-				"Player [Name = Damian Lillard| Score=825| Teams=[POR]| Positions=[PG], " +
-				"Player [Name = Kevin Durant| Score=864| Teams=[SEA, OKC, GSW]| Positions=[SG, SF], " +
-				"Player [Name = Anthony Davis| Score=894| Teams=[NOH, NOP]| Positions=[PF, C], " +
-				"Player [Name = Russell Westbrook| Score=931| Teams=[OKC]| Positions=[PG], " +
-				"Player [Name = Karl-Anthony Towns| Score=965| Teams=[MIN]| Positions=[C], " +
-				"Player [Name = Stephen Curry| Score=975| Teams=[GSW]| Positions=[PG], " +
-				"Player [Name = James Harden| Score=994| Teams=[OKC, HOU]| Positions=[SG, PG], " + 
-				"Player [Name = LeBron James| Score=1031| Teams=[CLE, MIA]| Positions=[SG, SF, PF]]";
-		
 		DyVSolution.cargarArchivo("C:\\WORKSPACES\\EDA_2022\\practica_1\\NbaStats.txt");
+		ArrayList<Player> arrayADevolver = new ArrayList<Player>();
 		arrayADevolver = DyVSolution.diezMejoresJugadores();
+		
+		ArrayList<Player> arrayEsperado = new ArrayList<Player>();
+		arrayEsperado.add(new Player ("Wilt Chamberlain*", "PHW, SFW, TOT, PHI, LAL", "C", 785));
+		arrayEsperado.add(new Player ("DeMar DeRozan", "TOR", "SG", 820));
+		arrayEsperado.add(new Player ("Damian Lillard", "POR", "PG", 825));
+		arrayEsperado.add(new Player ("Kevin Durant", "SEA, OKC, GSW", "SG, SF", 864));
+		arrayEsperado.add(new Player ("Anthony Davis", "NOH, NOP", "PF, C", 894));
+		arrayEsperado.add(new Player ("Russell Westbrook", "OKC", "PG", 931));
+		arrayEsperado.add(new Player ("Karl-Anthony Towns", "MIN", "C", 965));
+		arrayEsperado.add(new Player ("Stephen Curry", "GSW", "PG", 975));
+		arrayEsperado.add(new Player ("James Harden", "OKC, HOU", "SG, PG", 994));
+		arrayEsperado.add(new Player ("LeBron James", "CLE, MIA", "SG, SF, PF", 1031));
+		
 		//System.out.println("\nArray a devolver: " + arrayADevolver);
-		//System.out.println("Salida Esperada: " + salidaEsperada);
-		assertEquals(salidaEsperada, arrayADevolver.toString());
+		//System.out.println("\nArray a devolver: " + arrayEsperado);
+		assertEquals(arrayADevolver.toString(), arrayEsperado.toString());
 	}
 	
 	@Test
@@ -37,24 +39,26 @@ public class NbaStatsJUnit5 {
 		
 		System.out.println("\n***TOP 10 MEJORES JUGADORES CON REVERSE***");
 		
-		ArrayList<Player> arrayADevolver;
-		String salidaEsperada = "[Player [Name = LeBron James| Score=1031| Teams=[CLE, MIA]| Positions=[SG, SF, PF], " +
-				"Player [Name = James Harden| Score=994| Teams=[OKC, HOU]| Positions=[SG, PG], " +
-				"Player [Name = Stephen Curry| Score=975| Teams=[GSW]| Positions=[PG], " +
-				"Player [Name = Karl-Anthony Towns| Score=965| Teams=[MIN]| Positions=[C], " +
-				"Player [Name = Russell Westbrook| Score=931| Teams=[OKC]| Positions=[PG], " +
-				"Player [Name = Anthony Davis| Score=894| Teams=[NOH, NOP]| Positions=[PF, C], " +
-				"Player [Name = Kevin Durant| Score=864| Teams=[SEA, OKC, GSW]| Positions=[SG, SF], " +
-				"Player [Name = Damian Lillard| Score=825| Teams=[POR]| Positions=[PG], " + 
-				"Player [Name = DeMar DeRozan| Score=820| Teams=[TOR]| Positions=[SG], " +
-				"Player [Name = Wilt Chamberlain*| Score=785| Teams=[PHW, SFW, TOT, PHI, LAL]| Positions=[C]]";
-		
 		DyVSolution.cargarArchivo("C:\\WORKSPACES\\EDA_2022\\practica_1\\NbaStats.txt");
+		ArrayList<Player> arrayADevolver = new ArrayList<Player>();
 		arrayADevolver = DyVSolution.diezMejoresJugadores();
+		
+		ArrayList<Player> arrayEsperado = new ArrayList<Player>();
+		arrayEsperado.add(new Player ("LeBron James", "CLE, MIA", "SG, SF, PF", 1031));
+		arrayEsperado.add(new Player ("James Harden", "OKC, HOU", "SG, PG", 994));
+		arrayEsperado.add(new Player ("Stephen Curry", "GSW", "PG", 975));
+		arrayEsperado.add(new Player ("Karl-Anthony Towns", "MIN", "C", 965));
+		arrayEsperado.add(new Player ("Russell Westbrook", "OKC", "PG", 931));
+		arrayEsperado.add(new Player ("Anthony Davis", "NOH, NOP", "PF, C", 894));
+		arrayEsperado.add(new Player ("Kevin Durant", "SEA, OKC, GSW", "SG, SF", 864));
+		arrayEsperado.add(new Player ("Damian Lillard", "POR", "PG", 825));
+		arrayEsperado.add(new Player ("DeMar DeRozan", "TOR", "SG", 820));
+		arrayEsperado.add(new Player ("Wilt Chamberlain*", "PHW, SFW, TOT, PHI, LAL", "C", 785));
+		
 		Collections.reverse(arrayADevolver); //en vez de sacarlo de menor a mayor score, lo sacamos cambiado de sentido
+		
 		//System.out.println("\nArray a devolver: " + arrayADevolver);
-		//System.out.println("Salida Esperada: " + salidaEsperada);
-		assertEquals(salidaEsperada, arrayADevolver.toString());
+		//System.out.println("\nArray a devolver: " + arrayEsperado);
+		assertEquals(arrayEsperado.toString(), arrayADevolver.toString());
 	}
-
 }
