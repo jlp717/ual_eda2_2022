@@ -1,9 +1,11 @@
-package practica_1;
+package practica_1_Agustin;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import practica_1_Agustin.Player;
 
 public class DYV {
     
@@ -11,6 +13,7 @@ public class DYV {
             File.separator + File.separator + "NbaStats.txt";
     
     private static ArrayList<Player> estadisticas;
+    
     public static int n = 10;
     
     	public static void main(String [] args) {
@@ -21,7 +24,7 @@ public class DYV {
             long endNano = System.nanoTime();
             long endMili = System.currentTimeMillis();
             System.out.println("\nTiempo de ejecuciónn: " + (endNano-startNano) + " nanosegundos. || " + (endMili-startMili) + " milisegundos.");
-        }
+    	}
     
 
     public static ArrayList<Player> diezMejores() {
@@ -62,7 +65,6 @@ public class DYV {
         }
         return resultado;    
     }
-    
 //    private static void diezMejores(int inicio, int fin, ArrayList<Player> auxiliar) {
 //        if (inicio == fin) {
 //            auxiliar.add(estadisticas.get(inicio));
