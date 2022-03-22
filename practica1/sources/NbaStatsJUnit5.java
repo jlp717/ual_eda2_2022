@@ -1,4 +1,4 @@
-package practica_1_test;
+package practica_1_Agustin_test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.junit.Test;
-import practica_1.*;
+import practica_1_Agustin.*;
 
 public class NbaStatsJUnit5 {
 
@@ -20,6 +20,7 @@ public class NbaStatsJUnit5 {
 		DYV.cargarArchivo(ruta + "NbaStats.txt");
 		
 		ArrayList<Player> arrayMetodo = new ArrayList<Player>();
+		DYV.n = 10;
 		arrayMetodo = DYV.diezMejores();
 		
 		ArrayList<Player> arrayEsperado = new ArrayList<Player>();
@@ -36,7 +37,7 @@ public class NbaStatsJUnit5 {
 		
 		//System.out.println("Array metodo: " + arrayMetodo);
 		//System.out.println("Array esperado: " + arrayEsperado);
-		assertEquals(arrayMetodo.toString(), arrayEsperado.toString());
+		assertEquals(arrayEsperado.toString(), arrayMetodo.toString());
 	}
 
 
@@ -44,6 +45,7 @@ public class NbaStatsJUnit5 {
 	public void testB_ComprobarTop10Jugadores() {
 
 		System.out.println("\n***TOP 10 MEJORES JUGADORES CON REVERSE***");
+		DYV.n = 10;
 		DYV.cargarArchivo(ruta + "NbaStats.txt");
 		
 		ArrayList<Player> arrayMetodo = new ArrayList<Player>();
@@ -78,10 +80,10 @@ public class NbaStatsJUnit5 {
 	@Test
 	public void testPeorJugadorTop10() {
 		DYV.cargarArchivo(ruta+"NbaStats.txt");
-		DYV.n = 1;
+		DYV.n = 10;
 		ArrayList<Player> prueba = DYV.diezMejores();
-		assertTrue(prueba.size()==1);
-		assertEquals("Wilt Chamberlain*",prueba.get(0).getPlayerName());
+		assertTrue(prueba.size()==10);
+		assertEquals("Jerry West*",prueba.get(9).getPlayerName());
 	}
 	
 	@Test
