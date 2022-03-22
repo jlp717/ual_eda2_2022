@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import practica_1_Agustin.Player;
+import practica_1.Player;
 
 public class DYV {
     
