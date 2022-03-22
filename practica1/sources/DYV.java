@@ -1,4 +1,4 @@
-package practica_1_Agustin;
+package practica_1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
