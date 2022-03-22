@@ -1,4 +1,4 @@
-package practica_1;
+package practica_1_test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -14,25 +14,13 @@ public class NbaStatsJUnit5 {
 	private static String ruta = System.getProperty("user.dir") + File.separator + "src" + File.separator;
 
 	@Test
-	public void testArchivoSinDatos() {
-		DYV.cargarArchivo(ruta + "ArchivoSinDatos.txt");
-		DYV.n = 20;
-		try {
-			DYV.diezMejores();
-			fail("Tendría que haber saltado una excepción. Inténtalo de nuevo.");
-		} catch (RuntimeException ex) {
-			assertEquals("No hay datos.", ex.getMessage());
-		}
-	}
-
-	@Test
 	public void testA_ComprobarTop10Jugadores() {
 
 		System.out.println("***TOP 10 MEJORES JUGADORES CON ORDEN NORMAL***");
 		DYV.cargarArchivo(ruta + "NbaStats.txt");
 		
-		ArrayList<Player> arrMetodo = new ArrayList<Player>();
-		arrMetodo = DYV.diezMejores();
+		ArrayList<Player> arrayMetodo = new ArrayList<Player>();
+		arrayMetodo = DYV.diezMejores();
 		
 		ArrayList<Player> arrayEsperado = new ArrayList<Player>();
 		arrayEsperado.add(new Player("Wilt Chamberlain*", "SFW, PHI, LAL, TOT, PHW", "C", 1153));
@@ -46,8 +34,11 @@ public class NbaStatsJUnit5 {
 		arrayEsperado.add(new Player("Oscar Robertson*", "CIN, MIL", "PG", 925));
 		arrayEsperado.add(new Player("Jerry West*", "LAL", "SG, PG", 854));
 		
-		assertEquals(arrMetodo.toString(), arrayEsperado.toString());
+		//System.out.println("Array metodo: " + arrayMetodo);
+		//System.out.println("Array esperado: " + arrayEsperado);
+		assertEquals(arrayMetodo.toString(), arrayEsperado.toString());
 	}
+
 
 	@Test
 	public void testB_ComprobarTop10Jugadores() {
@@ -55,8 +46,8 @@ public class NbaStatsJUnit5 {
 		System.out.println("\n***TOP 10 MEJORES JUGADORES CON REVERSE***");
 		DYV.cargarArchivo(ruta + "NbaStats.txt");
 		
-		ArrayList<Player> arrMetodo = new ArrayList<Player>();
-		arrMetodo = DYV.diezMejores();
+		ArrayList<Player> arrayMetodo = new ArrayList<Player>();
+		arrayMetodo = DYV.diezMejores();
 
 		ArrayList<Player> arrayEsperado = new ArrayList<Player>();
 		arrayEsperado.add(new Player("Jerry West*", "LAL", "SG, PG", 854));
@@ -70,8 +61,10 @@ public class NbaStatsJUnit5 {
 		arrayEsperado.add(new Player("Kareem Abdul-Jabbar*", "MIL, LAL", "C", 1076));
 		arrayEsperado.add(new Player("Wilt Chamberlain*", "SFW, PHI, LAL, TOT, PHW", "C", 1153));
 
-		Collections.reverse(arrMetodo); // en vez de sacarlo de menor a mayor score, lo sacamos cambiado de orden
-		assertEquals(arrayEsperado.toString(), arrMetodo.toString());
+		Collections.reverse(arrayMetodo); // en vez de sacarlo de menor a mayor score, lo sacamos cambiado de orden
+		//System.out.println("Array metodo: " + arrayMetodo);
+		//System.out.println("Array esperado: " + arrayEsperado);
+		assertEquals(arrayEsperado.toString(), arrayMetodo.toString());
 	}
 
 	@Test
@@ -90,4 +83,17 @@ public class NbaStatsJUnit5 {
 		assertTrue(prueba.size()==1);
 		assertEquals("Wilt Chamberlain*",prueba.get(0).getPlayerName());
 	}
+	
+	@Test
+	public void testArchivoSinDatos() {
+		DYV.cargarArchivo(ruta + "ArchivoSinDatos.txt");
+		DYV.n = 20;
+		try {
+			DYV.diezMejores();
+			fail("Tendría que haber saltado una excepción. Inténtalo de nuevo.");
+		} catch (RuntimeException ex) {
+			assertEquals("No hay datos.", ex.getMessage());
+		}
+	}
+
 }
