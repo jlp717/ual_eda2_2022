@@ -1,4 +1,4 @@
-package practica_1;
+package practica_1_Agustin;
 
 import java.util.ArrayList;
 import java.util.HashSet;
