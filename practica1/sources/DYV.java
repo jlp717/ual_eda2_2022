@@ -29,7 +29,7 @@ public class DYV {
             throw new RuntimeException("No hay datos.");
         } else {
             ArrayList<Player> ganadores = diezMejores(0,estadisticas.size()-1);
-            ganadores.forEach((n) -> System.out.println(n));
+            //ganadores.forEach((n) -> System.out.println(n));
             return ganadores;
         }
     }
