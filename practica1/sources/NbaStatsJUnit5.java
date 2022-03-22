@@ -1,4 +1,4 @@
-package practica_1_Agustin_test;
+package practica_1_test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.junit.Test;
-import practica_1_Agustin.*;
+import practica_1.*;
 
 public class NbaStatsJUnit5 {
 
