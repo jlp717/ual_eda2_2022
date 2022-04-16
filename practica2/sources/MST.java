@@ -14,12 +14,25 @@ public class MST { // MST -> Minimum Spanning Tree
 	
 	private final double INFINITO = Double.MAX_VALUE;
 	private boolean esDirigido;
+	/*
+	 * El grafo está creado con un HashMap puesto que no es necesario ordenar, por eso durante
+	 * el código veremos HashMaps y HashSets, quitando en varios casos donde sí que será necesario
+	 * emplear TreeMaps y TreeSets.
+	 * También hemos de aclarar que está creado de esta forma pues que en su Key, se encuentra el 
+	 * vértice inicial, mientras que en su Value, tenemos otro HashMap que a su vez contiene el 
+	 * vértice final y el respectivo peso entre ambos. 
+	 */
 	private HashMap<String, HashMap<String, Double>> grafo;//Key=Vertice, Key2=, Vertice, Value=Peso
 	private String origen;
 	
+	/*
+	 * Aquí hemos creado el método main para mostrar las salidas y los tiempos de ejecución.
+	 */
+	
 	public static void main(String[] args) {
-		MST tree = new MST("C:\\WORKSPACES\\EDA_2022\\practica_2\\src\\graphPrimKruskal.txt", "A");
-//		MST tree = new MST("C:\\WORKSPACES\\EstructurasDatosAlgoritmosII\\Practica_1\\src\\org\\eda2\\practica02\\Prueba01.txt", "0");
+		//MST tree = new MST("C:\\WORKSPACES\\EDA_2022\\practica_2\\src\\graphPrimKruskal.txt", "A");
+		MST tree = new MST("C:\\WORKSPACES\\EstructurasDatosAlgoritmosII\\Practica_1\\src\\org\\eda2\\practica02\\Prueba10Vertices.txt", "0");
+		
 		List<Arista> resultado = tree.prim();
 		System.out.println(resultado);
 		ContarCostes costes = new ContarCostes(resultado);
@@ -35,14 +48,23 @@ public class MST { // MST -> Minimum Spanning Tree
 		ContarCostes costes2 = new ContarCostes(resultado2);
 		System.out.println(costes2);
 	}
+	
+	/*
+	 * Creamos el constructor por defecto, el cual crea un grafo vacío.
+	 */
 
 	public MST() {
 		this.esDirigido = true;
 		this.grafo = new HashMap<String, HashMap<String, Double>>();
 	}
 	
+	/*
+	 * La idea al usar el this() es que haga una llamada al MST() de arriba.
+	 * Este método constructor lo usamos como un cargarArchivo.
+	 */
+	
 	public MST(String archivo, String origen) {
-		this(); // Hace una llamada al MST de arriba.
+		this(); 
 		this.origen = origen;
 		Scanner scan = null;
 		String linea = "";
@@ -69,18 +91,6 @@ public class MST { // MST -> Minimum Spanning Tree
 			agregarArista(aux[0], aux[1], Double.parseDouble(aux[2]));
 		}
 	}
-	
-	public HashMap<String, HashMap<String, Double>> getGrafo() {
-		return grafo;
-	}
-	
-	public String getOrigen() {
-		return origen;
-	}
-
-    public void setOrigen(String origen) {
-		this.origen = origen;
-	}
 
 	public boolean getEsDirigido() {
   		return this.esDirigido;
@@ -89,6 +99,10 @@ public class MST { // MST -> Minimum Spanning Tree
 	public void setEsDirigido(boolean esDirigido) {
   		this.esDirigido = esDirigido;
   	}
+	
+	/*
+	 * Ahora empezamos con los métodos orientados a la modificación del grafo.
+	 */
 	
 	public boolean agregarVertice(String vertice) {
         if (this.grafo.containsKey(vertice)) return false;
@@ -99,8 +113,15 @@ public class MST { // MST -> Minimum Spanning Tree
   	public boolean agregarArista(String vertice1, String vertice2, double peso) {
   		agregarVertice(vertice1);
   		agregarVertice(vertice2);
-  		this.grafo.get(vertice1).put(vertice2, peso); // Agrega la arista, pues al primer vértice le añade el segundo vértice y su respectivo peso.
-  		if (!this.esDirigido) { // Ocurre únicamente si no es dirigido. Pues si, por ejemplo, agregamos una arista de A - B, también se agrega una de B - A. Con otras palabras, en sentido contrario.
+  		/*
+  		 * Agrega la arista, pues al primer vértice le añade el segundo vértice y su respectivo peso.
+  		 */
+  		this.grafo.get(vertice1).put(vertice2, peso); 
+  		/*
+  		 * Ocurre únicamente si no es dirigido. Pues si, por ejemplo, agregamos una arista de A - B, 
+  		 * también se agrega una de B - A. Con otras palabras, en sentido contrario.
+  		 */
+  		if (!this.esDirigido) { 
         	this.grafo.get(vertice2).put(vertice1, peso);
        	}
     	return true;
@@ -114,31 +135,74 @@ public class MST { // MST -> Minimum Spanning Tree
   	public Double getPeso (String vertice1, String vertice2) {
 		return contieneArista(vertice1, vertice2) ? this.grafo.get(vertice1).get(vertice2) : null;
 	}
-
+  	
+  	/*
+  	 * Los métodos restantes ya son los algoritmos correspondientes.
+  	 * Hemos de decir que para poder comprobar los tiempos de una manera más cómoda 
+  	 * para nosotros, decidimos colocarle una recolección de tiempos al inicio y al final de 
+  	 * los métodos.
+  	 */
 
 	public List<Arista> prim(){
+    	long startNano = System.nanoTime();
+    	long startMili = System.currentTimeMillis();
+    	/*
+    	 * Siempre que el origen sea nulo o que no se contenga la Key, muestra la siguiente excepción.
+    	 */
 		if(origen == null || !this.grafo.containsKey(origen)) throw new RuntimeException("No puede ser nulo.");
 		
-		//Inicializacion de estructuras auxiliares
-		HashMap<String, Double> pesos = new HashMap<String, Double>();//Key=Vertice, Value=Peso
-		HashMap<String, String> ramas = new HashMap<String, String>();//Key=Vertice, Value=Vertice
-		HashSet<String> restantes = new HashSet<String>();//Vertices
+		/*
+		 * Procedemos a inicializar las estructuras auxiliares.
+		 */
+		
+		/*
+		 * Donde la Key es el vértice en concreto y el Value es el peso.
+		 */
+		HashMap<String, Double> pesos = new HashMap<String, Double>();
+		/*
+		 * Donde la Key es el vértice inicial y el Value es el vértice final.
+		 */
+		HashMap<String, String> ramas = new HashMap<String, String>();
+		HashSet<String> restantes = new HashSet<String>();
 		List<Arista> resultadoFinal = new ArrayList<Arista>(); 
 		String desde = null;
-		
-		//Incluir todos los vertices
+		/*
+		 * El siguiente proceso sirve para incluir todos los vertices. No obstante, también se 
+		 * podría hacer de la forma:
+		 * 
+		 * for(String vertice : this.grafo.keySet()) {
+		 * 	if(!vertices.equals(origen)){
+		 * 		restantes.add(vertice);
+		 * 	}
+		 * }
+		 * 
+		 * Sin embargo, de la forma en la que lo hemos hecho, es ligeramente más rápido.
+		 */
 		for (String vertice : this.grafo.keySet()) {
 			restantes.add(vertice);
 		}
 		restantes.remove(origen);
-		
-		//Inicializar estructuras (todos los vertices excepto adyacentes valorados a infinito)
+		/*
+		 * La idea de lo próximo es la de inicializar estructuras, donde se hallen todos los vértices
+		 * exceptuando los adyacentes (los cuales denotamos como INFINITO).
+		 * He ahí la razón de la condición del if-else siguiente.
+		 */
 		for (String vertice : restantes) {
-			Double peso = getPeso(origen, vertice); //Acudimos a la clase Double para poder albergar elementos nulos.
-			if(peso != null) { //adyacentes al origen
+			/*
+			 * Es importante usar la clase Double para que de esta forma, sea posible contener
+			 * valores nulos y de esa forma, poder recorrer el if-else adecuadamente.
+			 */
+			Double peso = getPeso(origen, vertice); 
+			/*
+			 * Son adyacentes al origen.
+			 */
+			if(peso != null) { 
 				ramas.put(vertice, origen);
 				pesos.put(vertice, peso);
-			}else { //no adyacentes al origen
+			/*
+			 * No son adyacentes al origen.
+			 */
+			}else { 
 				ramas.put(vertice, null);
 				pesos.put(vertice, INFINITO);
 			}
@@ -146,28 +210,44 @@ public class MST { // MST -> Minimum Spanning Tree
 		}
 		ramas.put(origen, origen);
 		pesos.put(origen, 0.0);
-		
-		
-		//Nucleo principal del algoritmo
-		while(!restantes.isEmpty()) { //Mientras queden vertices por valorar, buscamos el que tenga el menor peso.
-			//Busqueda del vertice de menor peso
+		/*
+		 * La siguiente parte equivale al núcleo principal del algoritmo, mientras que el próximo bloque
+		 * se trata de su función de selección. Esta reside en el hecho de que mientras aún queden vértices por valorar, 
+		 * buscamos siempre el que tenga el menor peso, de ahí el if, dado que siempre que se encuentre un peso menor al
+		 * actual mínimo, se actualiza.
+		 */
+		while(!restantes.isEmpty()) { 
 			double min = INFINITO;
 			desde = null;
-			for (String v : restantes) {//Para cada vertice de los restantes...
-				double weight = pesos.get(v);
-				if(weight < min) { //Si tiene menor peso que el valor MIN se actualiza
-					min = weight;
+			for (String v : restantes) {
+				double peso = pesos.get(v);
+				if(peso < min) { 
+					min = peso;
 					desde = v;
 				}
 			}
-			
-			if(desde == null) break; //Se para porque no es conexo
-			restantes.remove(desde); //Se elimina el vertice de menos peso de los restantes
-			String aux = ramas.get(desde); //Se obtiene el vertice desde el que se llega
-			resultadoFinal.add(new Arista (aux, desde, getPeso(aux, desde))); //Se agrega la arista a la solucion
-			//Para el resto de vertices restantes
+			/*
+			 * Si no es conexo, paramos el bucle.
+			 */
+			if(desde == null) break;
+			/*
+			 * De los vértices restantes, eliminamos el vértice de menor peso.
+			 */
+			restantes.remove(desde);
+			/*
+			 * Obtenemos el vértice desde el que se llega.
+			 */
+			String aux = ramas.get(desde);
+			/*
+			 * Dicha arista se agrega al resultado final.
+			 */
+			resultadoFinal.add(new Arista (aux, desde, getPeso(aux, desde)));
 			for (String hasta : restantes) {
-				Double peso = getPeso(desde, hasta); //CUIDADO, PUEDE SER NULO
+				/*
+				 * Como el peso puede ser nulo, dado que hemos acudido a la clase Double, tenemos que crear
+				 * una condición para que lo verifique también. 
+				 */
+				Double peso = getPeso(desde, hasta);
 				if(peso != null && peso < pesos.get(hasta)) {
 					pesos.put(hasta, peso);
 					ramas.put(hasta, desde);
@@ -175,29 +255,45 @@ public class MST { // MST -> Minimum Spanning Tree
 			}
 		}
 
+		long endNano = System.nanoTime();
+		long endMili = System.currentTimeMillis();
+		System.out.println("Tiempo de ejecución para algoritmo Prim: " + (endNano-startNano) + " nanosegundos. || " + (endMili-startMili) + " milisegundos.");
 		return resultadoFinal;
 		
 	}
 
     public List<Arista> primPQ(){
+    	long startNano = System.nanoTime();
+    	long startMili = System.currentTimeMillis();
 		String origen = this.origen;
+		/*
+    	 * Siempre que el origen sea nulo o que no se contenga la Key, muestra la siguiente excepción.
+    	 */
 		if(origen == null || !this.grafo.containsKey(origen)) throw new RuntimeException("No puede ser nulo.");
-		//Inicializacion de estructuras auxiliares
-		HashSet<String> restantes = new HashSet<String>();//Vertices
-		PriorityQueue<Arista> colaDePrioridad = new PriorityQueue<Arista>(); //Cola de prioridad de Aristas
+		/*
+		 * Inicializamos las estructuras auxiliares.
+		 */
+		HashSet<String> restantes = new HashSet<String>();
+		/*
+		 * Es necesario crear una PQ de Aristas.
+		 */
+		PriorityQueue<Arista> colaDePrioridad = new PriorityQueue<Arista>();
 		List<Arista> resultadoFinal = new ArrayList<Arista>(); 
 		String desde = origen;
 		String hasta;
 		Double peso;
 		Arista aux;
-
-		//Incluir todos los vertices
+		/*
+		 * Esta parte de aquí resulta ser la misma que la del algoritmo de Prim normal, de modo que su alternativa 
+		 * también puede ser aceptable.
+		 */
 		for (String vertice : this.grafo.keySet()) {
 			restantes.add(vertice);
 		}
 		restantes.remove(origen);
-		
-		//Nucleo principal del algoritmo
+		/*
+		 * La siguiente parte equivale al núcleo principal del algoritmo.
+		 */
 		while(!restantes.isEmpty()) {
 			for (Entry<String, Double> iterador : this.grafo.get(desde).entrySet()) {
 				hasta = iterador.getKey();
@@ -207,7 +303,11 @@ public class MST { // MST -> Minimum Spanning Tree
 					colaDePrioridad.add(aux);
 				}
 			}
-			
+			/* 
+			 * La función de selección se encuentra en el siguiente bloque, aunque técnicamente 
+			 * sólo sería el poll de la cola de priodidad pues únicamente queremos obtener el 
+			 * que menos peso tenga / el vértice más cercano.
+			 */
 			do {
 				aux = colaDePrioridad.poll();
 				desde = aux.getOrigen();
@@ -219,29 +319,47 @@ public class MST { // MST -> Minimum Spanning Tree
 			resultadoFinal.add(new Arista(aux.getOrigen(), aux.getDestino(), aux.getPeso()));
 			desde = hasta;
 		}
+		long endNano = System.nanoTime();
+		long endMili = System.currentTimeMillis();
+		System.out.println("Tiempo de ejecución para algoritmo PrimPQ: " + (endNano-startNano) + " nanosegundos. || " + (endMili-startMili) + " milisegundos.");
 		return resultadoFinal;
 	}
 
     public List<Arista> kruskal(){
+    	long startNano = System.nanoTime();
+    	long startMili = System.currentTimeMillis();
 		String origen = this.origen;
+		/*
+    	 * Siempre que el origen sea nulo o que no se contenga la Key, muestra la siguiente excepción.
+    	 */
 		if(origen == null || !this.grafo.containsKey(origen)) throw new RuntimeException("No puede ser nulo.");
-		//Inicializacion de estructuras auxiliares
-		TreeMap<String,String> ramas = new TreeMap<String,String>();//Key=Vertice, Value=Vertice
-		TreeMap<String,Double> restantes = new TreeMap<String,Double>();//Key=Vertice, Value=Peso
+		/*
+		 * Inicializamos las estructuras auxiliares.
+		 */
+		TreeMap<String,String> ramas = new TreeMap<String,String>();
+		TreeMap<String,Double> restantes = new TreeMap<String,Double>();
 		List<Arista> resultadoFinal = new ArrayList<Arista>();
-		
-		//Incluir todos los vertices y el coste infinito
+		/*
+		 * Debemos introducir todos los vértices y ponerle infinito como el peso.
+		 */
 		for (String vertice : grafo.keySet()) {
 			restantes.put(vertice, INFINITO);
 		}
 		boolean esPrimero = true;
 		while(!restantes.isEmpty()) {
-			//Busqueda de la menor arista
+			/*
+			 * Buscamos la primera arista. También hemos de destacar que en la condición, 
+			 * si se trata de la primera iteración que se produce, se empieza por el 
+			 * origen.
+			 */
 			String keyMinima = restantes.firstKey();
-			if(esPrimero) {//Si es la primera iteración, el punto de partida es origen
+			if(esPrimero) {
 				keyMinima = origen;
 				esPrimero = false;
 			}
+			/*
+			 * Equivale a la función de selección pues se intenta buscar la arista más cercana / de menor peso.
+			 */
 			Double valorMinimo = INFINITO;
 			for (Entry<String, Double> entrada : restantes.entrySet()) {
 				if(entrada.getValue() < valorMinimo) {
@@ -249,14 +367,21 @@ public class MST { // MST -> Minimum Spanning Tree
 					keyMinima = entrada.getKey();
 				}
 			}
-			restantes.remove(keyMinima);//Se elimina la arista del conjunto
-			
-			//Para cada uno de sus vertices adyacentes...
+			/*
+			 * Eliminamos la arista con valor mínimo del conjunto de los restantes.
+			 */
+			restantes.remove(keyMinima);
+			/*
+			 * Ahora debemos valorar para cada uno de sus vértices adyacentes.
+			 */
 			for (Entry<String, Double> iterador : grafo.get(keyMinima).entrySet()) {
 				String hasta = iterador.getKey();
 				Double dActual = getPeso(ramas.get(hasta), hasta);
 				dActual = dActual == null ? INFINITO : dActual;
-				//...se actualiza y agrega a la solucion si mejora el resultado actual
+				/*
+				 * Si de alguna forma se mejora el resultado actual, se actualiza y se agrega a la
+				 * solución.
+				 */
 				if(restantes.containsKey(hasta) && iterador.getValue() < INFINITO && iterador.getValue() < dActual) {
 					restantes.put(hasta, iterador.getValue());
 					ramas.put(hasta, keyMinima);
@@ -264,14 +389,18 @@ public class MST { // MST -> Minimum Spanning Tree
 				}
 			}
 		}
-		
-		//A partir de las aristas, se crea el conjunto de resultados
+		/*
+		 * En el siguiente bloque trataremos de crear el conjunto de resultados a partir de las aristas.
+		 */
 		for (Entry<String, String> iterador : ramas.entrySet()) {
-			String to = iterador.getKey();
-			String from = iterador.getValue();
-			resultadoFinal.add(new Arista (to, from, getPeso(to, from)));
+			String hasta = iterador.getKey();
+			String desde = iterador.getValue();
+			resultadoFinal.add(new Arista (hasta, desde, getPeso(hasta, desde)));
 		}
+		long endNano = System.nanoTime();
+    	long endMili = System.currentTimeMillis();
+    	System.out.println("Tiempo de ejecución para algoritmo Kruskal: " + (endNano-startNano) + " nanosegundos. || " + (endMili-startMili) + " milisegundos.");
 		return resultadoFinal;
 	}
-
 }
+
