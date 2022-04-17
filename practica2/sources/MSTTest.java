@@ -12,7 +12,8 @@ import org.junit.Test;
 
 public class MSTTest {
 	
-	private static String ruta = System.getProperty("user.dir") + File.separator + "src" + File.separator;
+	private static String ruta = System.getProperty("user.dir") + File.separator + "src" + File.separator + "org" + File.separator +
+			"eda2" + File.separator + "practica02" + File.separator;
 
 	@Test
 	public void ComprobarSalidaPrim() {
@@ -80,15 +81,17 @@ public class MSTTest {
 		assertTrue((costesPrim.getPrecioTotal() == costesPrimPQ.getPrecioTotal()) && (costesPrimPQ.getPrecioTotal() == costesKruskal.getPrecioTotal()));
 	}
 	
-	//@Test
-	//public void ArchivoIncorrecto(){
-	//	try {
-	//		MST proceso = new MST (ruta + "graphPrimKruskal.txt", "A");
-	//		fail("Tendría que haber saltado una excepción. Inténtalo de nuevo.");
-	//	} catch (Exception ex) {
-	//		assertEquals(ex.getMessage(), "Error al cargar el archivo. El sistema no puede encontrar el archivo especificado.");
-	//	}
-	//}
+//	@Test
+//	public void ArchivoIncorrecto(){
+//		try {
+//			MST proceso = new MST (ruta + "graphPrimKruskal.txt", "A");
+//			fail("Tendría que haber saltado una excepción. Inténtalo de nuevo.");
+//		} catch (Exception ex) {
+//			assertEquals(ex.getMessage(), "Error al cargar el archivo. El sistema no puede encontrar el archivo especificado.");
+//		}
+//	}
+	
+	
 	
 	@Test
 	public void PrimConOrigenEquivocado(){
